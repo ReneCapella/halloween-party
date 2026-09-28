@@ -1,0 +1,508 @@
+<title>Gold Bar Gazette</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,700&family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Special+Elite&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --desk: #0d0a12;
+    --desk-deep: #060509;
+    --paper: #17111c;
+    --paper-deep: #110d17;
+    --paper-shadow: #0a0710;
+    --ink: #ece2c8;
+    --ink-soft: #b8ab8c;
+    --cream: #f3ead9;
+    --shadow-dark: #050408;
+    --rust: #e2793a;
+    --moss: #8ea569;
+    --blood: #c14b4b;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+
+  body{
+    margin: 0;
+    background: var(--desk);
+    background-image:
+      radial-gradient(ellipse at 20% 8%, rgba(226,121,58,0.10), transparent 50%),
+      radial-gradient(ellipse at 82% 92%, rgba(142,165,105,0.07), transparent 55%);
+    color: var(--cream);
+    font-family: "PT Serif", Georgia, "Times New Roman", serif;
+    padding-inline: 16px;
+    padding-block: 32px;
+  }
+
+  a { color: inherit; }
+
+  .stage{
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  /* stacked-papers depth effect */
+  .stage::before,
+  .stage::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--paper-deep);
+    z-index: 0;
+  }
+  .stage::before{ transform: rotate(-1.4deg) translate(-6px, 10px); }
+  .stage::after{ transform: rotate(1deg) translate(8px, 6px); background: var(--paper-shadow); }
+
+  .paper{
+    position: relative;
+    z-index: 1;
+    background: var(--paper);
+    background-image:
+      radial-gradient(circle at 12% 14%, rgba(226,121,58,0.10), transparent 30%),
+      radial-gradient(circle at 88% 86%, rgba(142,165,105,0.08), transparent 32%),
+      repeating-linear-gradient(0deg, rgba(236,226,200,0.025) 0px, rgba(236,226,200,0.025) 1px, transparent 1px, transparent 3px);
+    color: var(--ink);
+    padding: clamp(20px, 5vw, 52px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.65), inset 0 0 130px rgba(0,0,0,0.55);
+    overflow: hidden;
+  }
+
+  .web{ position: absolute; width: 90px; height: 90px; color: var(--ink-soft); opacity: 0.5; pointer-events: none; z-index: 2; }
+  .web-left{ top: 0; left: 0; }
+  .web-right{ top: 0; right: 0; }
+  .spider-drop{ position: absolute; top: 0; right: 10%; width: 24px; height: 56px; color: var(--ink-soft); opacity: 0.8; pointer-events: none; z-index: 2; }
+  @media (max-width: 480px){
+    .spider-drop{ display: none; }
+    .web{ width: 58px; height: 58px; }
+  }
+
+  .classifieds-meta{
+    font-family: "Special Elite", serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
+    margin: 0 0 14px;
+    color: var(--ink);
+  }
+
+  /* ---------- masthead ---------- */
+  .masthead{
+    text-align: center;
+    padding-bottom: 14px;
+  }
+  .masthead-row{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(8px, 3vw, 24px);
+  }
+  .flank-icon{ width: 42px; height: 19px; flex: none; opacity: 0.85; color: var(--ink-soft); }
+  .masthead h1{
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    font-size: clamp(2.1rem, 8vw, 4rem);
+    margin: 0;
+    line-height: 0.95;
+    text-wrap: balance;
+  }
+  .tagline{
+    font-family: "Special Elite", "PT Serif", serif;
+    font-size: clamp(0.7rem, 1.6vw, 0.85rem);
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    margin: 6px 0 0;
+  }
+  .edition-line{
+    margin: 14px 0 0;
+    font-size: clamp(0.62rem, 1.6vw, 0.78rem);
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--ink-soft);
+  }
+
+  .rule{ border: none; border-top: 3px solid var(--ink); margin: 14px 0 4px; }
+  .rule-thin{ border: none; border-top: 1px solid var(--ink); margin: 4px 0 22px; }
+
+  /* ---------- main grid ---------- */
+  .spread{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  @media (min-width: 700px){
+    .spread{ grid-template-columns: 1.7fr 1fr; }
+  }
+
+  .headline{
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 900;
+    font-size: clamp(1.5rem, 4vw, 2.3rem);
+    line-height: 1.08;
+    margin: 0 0 6px;
+    text-wrap: balance;
+  }
+  .deck{
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    color: var(--ink-soft);
+    font-size: clamp(0.95rem, 2.4vw, 1.1rem);
+    margin: 0 0 10px;
+    text-wrap: balance;
+  }
+  .byline{
+    font-family: "Special Elite", serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 16px;
+  }
+
+  .article p{
+    line-height: 1.65;
+    margin: 0 0 14px;
+    font-size: 0.98rem;
+  }
+  .article p:first-of-type::first-letter{
+    font-family: "Playfair Display", serif;
+    font-weight: 900;
+    font-size: 3.4em;
+    line-height: 0.8;
+    float: left;
+    padding: 0.03em 0.07em 0 0;
+    color: var(--rust);
+  }
+
+  .glance{
+    border: 1px solid var(--ink);
+    padding: 16px 18px;
+    margin: 6px 0 18px;
+    background: rgba(236,226,200,0.02);
+  }
+  .glance h3{
+    margin: 0 0 10px;
+    font-family: "Special Elite", serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 8px;
+  }
+  .glance ul{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .glance li{ font-size: 0.9rem; line-height: 1.45; }
+  .glance strong{ color: var(--rust); }
+
+  /* ---------- sidebar ---------- */
+  aside{
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    height: 100%;
+  }
+  .aside-box{
+    border: 1px solid var(--ink);
+    padding: 16px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .aside-box h2{
+    font-family: "Special Elite", serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0 0 10px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .aside-box p{
+    font-size: 0.88rem;
+    line-height: 1.55;
+    margin: 0;
+    color: var(--ink);
+  }
+  .aside-box.weather h2{ color: var(--moss); border-color: var(--moss); }
+  .aside-box.notice h2{ color: var(--rust); border-color: var(--rust); }
+
+  .stamp{
+    display: inline-block;
+    border: 2px solid var(--blood);
+    color: var(--blood);
+    font-family: "Special Elite", serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    transform: rotate(-3deg);
+    margin-bottom: 10px;
+  }
+
+  /* ---------- classifieds ---------- */
+  .classifieds{
+    grid-column: 1 / -1;
+    border-top: 3px double var(--ink);
+    border-bottom: 3px double var(--ink);
+    padding: 22px 0;
+    margin-top: 4px;
+    text-align: center;
+  }
+  .classifieds h2{
+    font-family: "Playfair Display", serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: clamp(1.1rem, 3vw, 1.5rem);
+    margin: 0 0 12px;
+  }
+  .classifieds p{
+    max-width: 46ch;
+    margin: 0 auto 18px;
+    line-height: 1.6;
+    font-size: 0.92rem;
+  }
+
+  .rsvp-btn{
+    display: inline-block;
+    font-family: "Special Elite", serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--shadow-dark);
+    background: var(--rust);
+    padding: 14px 30px;
+    border: 2px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--shadow-dark);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    animation: pulse 2.6s ease-in-out infinite;
+  }
+  .rsvp-btn:hover{
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--shadow-dark);
+  }
+  .rsvp-btn:focus-visible{
+    outline: 3px solid var(--moss);
+    outline-offset: 3px;
+  }
+  @keyframes pulse{
+    0%, 100% { box-shadow: 4px 4px 0 var(--shadow-dark); }
+    50% { box-shadow: 4px 4px 0 var(--shadow-dark), 0 0 18px 4px rgba(226,121,58,0.55); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .rsvp-btn{ animation: none; }
+  }
+
+  .rsvp-note{
+    font-family: "Special Elite", serif;
+    font-size: 0.68rem;
+    color: var(--ink-soft);
+    margin-top: 12px;
+  }
+
+  /* ---------- footer ---------- */
+  .footer{
+    grid-column: 1 / -1;
+    margin-top: 22px;
+    text-align: center;
+  }
+  .countdown-label{
+    font-family: "Special Elite", serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .countdown{
+    display: flex;
+    justify-content: center;
+    gap: clamp(10px, 4vw, 26px);
+    font-family: "Playfair Display", serif;
+    font-weight: 900;
+    margin-bottom: 22px;
+  }
+  .countdown div{ text-align: center; min-width: 56px; }
+  .countdown .num{
+    display: block;
+    font-size: clamp(1.4rem, 5vw, 2.1rem);
+    font-variant-numeric: tabular-nums;
+    color: var(--rust);
+    line-height: 1;
+  }
+  .countdown .unit{
+    display: block;
+    font-family: "Special Elite", serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-top: 2px;
+  }
+  .fine-print{
+    font-family: "PT Serif", serif;
+    font-style: italic;
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    border-top: 1px solid var(--ink);
+    padding-top: 12px;
+  }
+
+</style>
+
+<div class="stage">
+  <div class="paper">
+
+    <svg class="web web-left" viewBox="0 0 120 120" aria-hidden="true">
+      <g fill="none" stroke="currentColor" stroke-width="1">
+        <line x1="0" y1="0" x2="110" y2="0"/>
+        <line x1="0" y1="0" x2="101" y2="42"/>
+        <line x1="0" y1="0" x2="78" y2="78"/>
+        <line x1="0" y1="0" x2="42" y2="101"/>
+        <line x1="0" y1="0" x2="0" y2="110"/>
+        <path d="M35,0 32,13.5 24.7,24.7 13.5,32 0,35"/>
+        <path d="M65,0 60,25 46,46 25,60 0,65"/>
+        <path d="M95,0 88,36 67,67 36,88 0,95"/>
+      </g>
+    </svg>
+    <svg class="web web-right" viewBox="0 0 120 120" aria-hidden="true">
+      <g fill="none" stroke="currentColor" stroke-width="1">
+        <line x1="120" y1="0" x2="10" y2="0"/>
+        <line x1="120" y1="0" x2="19" y2="42"/>
+        <line x1="120" y1="0" x2="42" y2="78"/>
+        <line x1="120" y1="0" x2="78" y2="101"/>
+        <line x1="120" y1="0" x2="120" y2="110"/>
+        <path d="M85,0 88,13.5 95.3,24.7 106.5,32 120,35"/>
+        <path d="M55,0 60,25 74,46 95,60 120,65"/>
+        <path d="M25,0 32,36 53,67 84,88 120,95"/>
+      </g>
+    </svg>
+    <svg class="spider-drop" viewBox="0 0 40 90" aria-hidden="true">
+      <line x1="20" y1="0" x2="20" y2="55" stroke="currentColor" stroke-width="1"/>
+      <g fill="currentColor" stroke="currentColor" stroke-width="1.4">
+        <ellipse cx="20" cy="66" rx="7" ry="9"/>
+        <circle cx="20" cy="54" r="4.5"/>
+        <path d="M20 60 L8 52 M20 60 L6 62 M20 60 L9 70 M20 63 L32 52 M20 63 L34 62 M20 63 L31 70" fill="none"/>
+      </g>
+    </svg>
+
+    <header class="masthead">
+      <div class="masthead-row">
+        <svg class="flank-icon" viewBox="0 0 100 45" aria-hidden="true">
+          <path fill="currentColor" d="M50 30 C40 10 20 5 0 15 C15 20 25 28 30 35 C20 30 5 35 0 45 C20 45 35 38 50 45 C65 38 80 45 100 45 C95 35 80 30 70 35 C75 28 85 20 100 15 C80 5 60 10 50 30 Z"/>
+        </svg>
+        <h1>The Gold Bar Gazette</h1>
+        <svg class="flank-icon" viewBox="0 0 100 45" aria-hidden="true">
+          <path fill="currentColor" d="M50 30 C40 10 20 5 0 15 C15 20 25 28 30 35 C20 30 5 35 0 45 C20 45 35 38 50 45 C65 38 80 45 100 45 C95 35 80 30 70 35 C75 28 85 20 100 15 C80 5 60 10 50 30 Z"/>
+        </svg>
+      </div>
+      <p class="tagline">All the news that's cursed to print</p>
+      <p class="edition-line">Special Halloween Edition &nbsp;·&nbsp; Saturday, October 31 &nbsp;·&nbsp; One Wretched Cent</p>
+    </header>
+
+    <hr class="rule">
+    <hr class="rule-thin">
+
+    <div class="spread">
+      <div class="classifieds">
+        <span class="stamp">Urgent</span>
+        <h2>Classifieds — RSVPs Wanted</h2>
+        <p class="classifieds-meta"><strong>When:</strong> Saturday, October 31 · 6–10 PM &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Where:</strong> 915 Orchard Ave, Gold Bar, WA 98251</p>
+        <p>Wanted: brave souls, age 12 and up, for one (1) evening of Halloween mischief. Costumes optional, mischief mandatory. Respond by <strong>Friday, October 24th</strong> so provisions can be properly stocked — though late entries are always welcome. Better late than not at all.</p>
+        <a class="rsvp-btn" href="https://forms.gle/cgsLjxmaeNDTvCgR6" target="_blank" rel="noopener">RSVP Now →</a>
+        <p class="rsvp-note">Takes you to a short form. Two minutes, tops.</p>
+      </div>
+
+      <article class="article">
+        <h2 class="headline">Local Home to Open Its Doors to the Darkness This Saturday</h2>
+        <p class="deck">Residents advised to arrive in costume. Departure not guaranteed before ten o'clock.</p>
+        <p class="byline">From the desk of René (this year, a pumpkin), Gold Bar Correspondent</p>
+
+        <p>Neighbors report unusual activity brewing at a residence just outside town, where sources confirm a gathering of the willing — and the wicked — will convene this Saturday, October 31st, from 6 to 10 in the evening. Full particulars appear in the notice above.</p>
+
+        <div class="glance">
+          <h3>At a Glance</h3>
+          <ul>
+            <li><strong>Costumes</strong> — welcome, never required. Come as you are, or as something else entirely.</li>
+            <li><strong>Food</strong> — it's a potluck. Bring a dish if you're able; sweets, savory, and drinks all count.</li>
+            <li><strong>Provided</strong> — cider, snacks, and a porch light left on for wandering trick-or-treaters.</li>
+            <li><strong>Parking</strong> — street parking along Orchard Ave.</li>
+          </ul>
+        </div>
+
+        <p>Early investigations suggest cobwebs in every corner, shadows that move when no one's looking, and at least one carved pumpkin standing watch by the door.</p>
+
+        <p>This publication cannot be held responsible for lingering hauntings, minor sugar crashes, or a sudden fondness for the dark.</p>
+      </article>
+
+      <aside>
+        <div class="aside-box weather">
+          <h2>Tonight's Forecast</h2>
+          <p>Fog rolling in after dusk. Visibility poor along the back roads. Temperatures dropping, spirits rising. Chance of pumpkin: 100%.</p>
+        </div>
+        <div class="aside-box notice">
+          <h2>Potluck Corner</h2>
+          <p>Bring a dish if the spirit moves you — sweets, savory, or something to drink. No sign-up needed; the Gazette trusts its readers to sort it out amongst themselves.</p>
+        </div>
+        <div class="aside-box">
+          <h2>Directions</h2>
+          <p>Off US Route 2: turn left on 9th, then left on Orchard Ave. First house on the left. Street parking out front.</p>
+        </div>
+      </aside>
+
+      <div class="footer">
+        <p class="countdown-label">Countdown to the Witching Hour</p>
+        <div class="countdown" id="countdown">
+          <div><span class="num" id="cd-days">–</span><span class="unit">Days</span></div>
+          <div><span class="num" id="cd-hours">–</span><span class="unit">Hrs</span></div>
+          <div><span class="num" id="cd-mins">–</span><span class="unit">Min</span></div>
+          <div><span class="num" id="cd-secs">–</span><span class="unit">Sec</span></div>
+        </div>
+        <p class="fine-print">Printed by lantern-light and cobweb press. No refunds, no regrets, no ordinary evenings.<br>&copy; This Household, Gold Bar, WA.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  (function(){
+    var target = new Date("2026-10-31T18:00:00-07:00").getTime();
+    var elDays = document.getElementById('cd-days');
+    var elHours = document.getElementById('cd-hours');
+    var elMins = document.getElementById('cd-mins');
+    var elSecs = document.getElementById('cd-secs');
+    var label = document.querySelector('.countdown-label');
+
+    function tick(){
+      var now = new Date().getTime();
+      var diff = target - now;
+      if (diff <= 0){
+        label.textContent = "The witching hour has arrived.";
+        document.getElementById('countdown').style.display = 'none';
+        return;
+      }
+      var d = Math.floor(diff / 86400000);
+      var h = Math.floor((diff % 86400000) / 3600000);
+      var m = Math.floor((diff % 3600000) / 60000);
+      var s = Math.floor((diff % 60000) / 1000);
+      elDays.textContent = d;
+      elHours.textContent = String(h).padStart(2, '0');
+      elMins.textContent = String(m).padStart(2, '0');
+      elSecs.textContent = String(s).padStart(2, '0');
+    }
+    tick();
+    setInterval(tick, 1000);
+  })();
+</script>
